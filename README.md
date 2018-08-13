@@ -16,7 +16,7 @@ majority of the plugin's capabilities.
 
 ## Running tests
 
-npx bedrock -d src/test/ts/browser
+1. npm run test
 
 ## Usage
 
