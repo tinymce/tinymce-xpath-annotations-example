@@ -1,5 +1,7 @@
 # tinymce-xpath-annnotations-example
 
+A reference implementation for integrating xpaths with TinyMCE annotations
+
 ## Description
 
 The `tinymce-xpath-annotations-example` plugin provides the ability to set and get annotations
