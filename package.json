@@ -1,0 +1,43 @@
+{
+  "name": "@tinymce/tinymce-xpath-annotations-example",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Reference Implementation for adding and removing annotations via XPath",
+  "main": "index.js",
+  "scripts": {
+    "test": "bedrock-auto -b chrome-headless -c tsconfig.json -d src/test",
+    "watch": "grunt watch & http-server -c-1 -o",
+    "demo-server": "bedrock -d src/test/ts/browser"
+  },
+  "dependencies": {
+    "@ephox/dom-globals": "latest",
+    "@ephox/katamari": "latest",
+    "tinymce": "^4.8.2",
+    "xpath-range": "^1.1.1"
+  },
+  "devDependencies": {
+    "@ephox/agar": "latest",
+    "@ephox/bedrock": "latest",
+    "@ephox/mcagar": "latest",
+    "@ephox/swag": "latest",
+    "awesome-typescript-loader": "^3.4.1",
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-less": "^1.4.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-rollup": "^8.2.0",
+    "grunt-shell": "^2.1.0",
+    "grunt-tslint": "^5.0.1",
+    "grunt-webpack": "^3.0.2",
+    "http-server": "^0.9.0",
+    "load-grunt-tasks": "^3.5.2",
+    "source-map-loader": "^0.2.3",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0",
+    "webpack-livereload-plugin": "^1.0.0"
+  },
+  "license": "Apache-2.0"
+}

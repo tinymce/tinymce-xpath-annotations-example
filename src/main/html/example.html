@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>TinyMCE Xpath Annotations Example</title>
+
+    <link href="css/example.css" rel="stylesheet">
+
+    <script src="/node_modules/tinymce/tinymce.js"></script>
+    <script src="js/plugin.js"></script>
+  </head>
+
+  <body>
+    <h2>TinyMCE Xpath Annotations Demo Page</h2>
+    <div id="ephox-ui">
+      <textarea class="editor" style: "height: 800px;">
+        <p>Some text</p>
+      </textarea>
+    </div>
+
+    <h3>A table showing the current annotation information. Use the 'X' to delete an annotation</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>UID</th>
+          <th>XPath</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+
+    <script>
+      var clearHighlights = function (ed) {
+        var tbody = document.querySelector('tbody');
+        var rows = tbody.querySelectorAll('tr')
+        for (var i = 0; i < rows.length; i++) {
+          rows[i].classList.remove('active-annotation');
+        }
+      };
+
+      var setHighlight = function (ed, uid) {
+        clearHighlights(ed);
+        var tbody = document.querySelector('tbody');
+        var rows = tbody.querySelectorAll('tr[data-uid="' + uid + '"]')
+        for (var i = 0; i < rows.length; i++) {
+          rows[i].classList.add('active-annotation');
+        }
+      };
+
+      var removeThenReapply = function (ed) {
+        var p = tinymce.activeEditor.plugins['tinymce-xpath-annotations-example'];
+        var ans = p.getAnnotations();
+        p.removeAllAnnotations();
+        updateTable(ed);
+        setTimeout(() => {
+          p.setAnnotations(ans);
+          updateTable(ed);
+        }, 5000);
+      };
+
+      var updateTable = function (ed) {
+        const annotations = ed.plugins['tinymce-xpath-annotations-example'].getAnnotations();
+        var tbody = document.querySelector('tbody');
+        tbody.innerHTML = '';
+
+        for (var i = 0; i < annotations.length; i++) {
+          (function () {
+            var a = annotations[i];
+            console.log('a', a);
+            var tr = document.createElement('tr');
+            tr.setAttribute('data-uid', a.uid);
+
+            var td1 = document.createElement('td');
+            td1.classList.add('uid-cell');
+            td1.innerHTML = a.uid;
+
+            var td2 = document.createElement('td');
+            td2.classList.add('xpath');
+            td2.innerHTML = JSON.stringify(a.xpath, null, 2);
+
+            const td3 = document.createElement('td');
+            const deleteMe = document.createElement('button');
+            deleteMe.innerHTML = 'X';
+            deleteMe.setAttribute('title', 'Click to delete this annotation');
+            deleteMe.addEventListener('click', function () {
+              ed.plugins['tinymce-xpath-annotations-example'].removeAnnotation(a.uid);
+              updateTable(ed);
+            });
+            td3.appendChild(deleteMe);
+
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+
+            tbody.appendChild(tr);
+          })();
+        }
+      };
+
+      tinymce.init({
+        selector: 'textarea.editor',
+        plugins: 'tinymce-xpath-annotations-example',
+        toolbar: 'xpath-add-annotation xpath-refresh',
+
+        content_style: '.xpath-annotation-marker { background-color: lightblue; }',
+
+        setup: function (ed) {
+          ed.addButton('xpath-add-annotation', {
+            text: 'Annotation',
+            onclick: function () {
+              var content = prompt('Add an annotation');
+              if (content !== null) {
+                // Get a random time.
+                const uid = 'u' + new Date().getTime();
+                ed.execCommand('xpath.add-annotation', null, { uid: uid });
+                updateTable(ed);
+              }
+            }
+          });
+
+          ed.addButton('xpath-refresh', {
+            text: 'Remove Annotations and Reapply them five seconds later',
+            onclick: function () {
+              removeThenReapply(ed);
+            }
+          });
+
+          ed.on('init', function () {
+            ed.setContent('<p>This is some text</p>');
+
+            ed.on('xpath.annotation-moved', function (data) {
+              console.log('Xpath annotations moved', data.uid, data.xpath);
+              updateTable(ed);
+            });
+
+            ed.on('xpath.no-annotation-selected', function () {
+              console.log('Cursor not inside any xpath annotation');
+              clearHighlights(ed);
+            });
+
+            ed.on('xpath.annotation-selected', function (data) {
+              console.log('Cursor inside xpath annotation', data);
+              setHighlight(ed, data.uid);
+            });
+          });
+        }
+      });
+    </script>
+
+  </body>
+</html>

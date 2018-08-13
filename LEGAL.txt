@@ -1,0 +1,5 @@
+Dependency:
+  name: xpath-range
+  version: 1.1.1
+  repository: https://github.com/openannotation/xpath-range
+  licenses: MIT

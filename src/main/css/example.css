@@ -1,0 +1,33 @@
+textarea.editor {
+  min-width: 1000px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid black;
+  padding: 0.2em;
+}
+
+th {
+  padding: 1em;
+  background-color: #ccc;
+}
+
+.content {
+  text-align: center;
+}
+
+.xpath {
+  font-size: smaller;
+  white-space: pre-wrap;
+}
+
+
+tr.active-annotation {
+  background: rgb(58, 56, 56);
+  color: white;
+}
